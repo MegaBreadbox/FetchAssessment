@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="header_padding">32dp</dimen>
+    <dimen name="small_padding">8dp</dimen>"
+    <dimen name="medium_padding">16dp</dimen>"
+    <dimen name="loading_circle_size">64dp</dimen>
+</resources>

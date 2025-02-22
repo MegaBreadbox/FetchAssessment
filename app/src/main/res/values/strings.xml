@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">fetch assessment</string>
+    <string name="generic_error">An error has occurred. Check your internet connection.</string>
+</resources>
