@@ -1,6 +1,7 @@
 package com.mega_breadbox.fetchassement.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,9 +36,15 @@ fun ListScreen(
     viewModel: ListScreenViewModel = hiltViewModel()
 ) {
     val listUiState by viewModel.listUiState.collectAsStateWithLifecycle()
+    val listMap by viewModel.fetchList.collectAsStateWithLifecycle()
 
     when(listUiState) {
-        is ListUiState.Success -> { FetchList((listUiState as ListUiState.Success).fetchListMap) }
+        is ListUiState.Success -> {
+            FetchList(
+            fetchList = listMap,
+            onCardClick =  { viewModel.deleteEntry(it)},
+            )
+        }
         is ListUiState.Error -> { ErrorScreen() }
         is ListUiState.Loading -> { LoadingScreen() }
     }
@@ -79,6 +86,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 @Composable
 fun FetchList(
     fetchList: Map<Int, List<FetchData>>,
+    onCardClick: (FetchData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -98,7 +106,10 @@ fun FetchList(
             }
 
             items(items) { itemEntry ->
-                FetchItem(fetchItem = itemEntry)
+                FetchItem(
+                    fetchItem = itemEntry,
+                    onClick = onCardClick
+                )
             }
         }
 
@@ -108,11 +119,13 @@ fun FetchList(
 @Composable
 fun FetchItem(
     fetchItem: FetchData,
+    onClick: (FetchData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .clickable { onClick(fetchItem) }
             .padding(horizontal = dimensionResource(id = R.dimen.small_padding))
 
     ) {
